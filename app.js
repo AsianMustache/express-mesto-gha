@@ -8,10 +8,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Подключение к MongoDB установлено");
+    console.log("Подключение установлено");
   })
   .catch((err) => {
-    console.error("Ошибка подключения к MongoDB:", err.message);
+    console.error("Ошибка подключения:", err.message);
   });
 
 app.get("/", (req, res) => {
