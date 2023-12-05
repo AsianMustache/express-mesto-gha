@@ -40,9 +40,10 @@ exports.deleteCard = async (req, res) => {
       return res.status(404).send({ message: "Карточка не найдена" });
     }
 
-    await card.remove();
+    await Card.deleteOne({ _id: cardId });
     res.status(200).send({ message: "Карточка удалена" });
   } catch (err) {
+    console.error("Ошибка при удалении карточки:", err);
     res.status(500).send({ message: "На сервере произошла ошибка" });
   }
 };
