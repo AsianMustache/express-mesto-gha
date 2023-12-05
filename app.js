@@ -37,6 +37,10 @@ app.get("/", (req, res) => {
   res.status(200).send({ message: "Я сработал" });
 });
 
+app.use((req, res) => {
+  res.status(404).json({ message: "Страница не найдена" });
+});
+
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
 });
