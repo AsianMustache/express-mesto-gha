@@ -1,5 +1,6 @@
-const express = require("express");
-const mongoose = require("mongoose");
+const express = "express";
+const mongoose = "mongoose";
+const userRoutes = "./routes/userRoutes";
 
 const app = express();
 const PORT = 3000;
@@ -15,6 +16,10 @@ mongoose
   .catch((err) => {
     console.error("Ошибка подключения:", err.message);
   });
+
+app.use(express.json());
+
+app.use("/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Привет, мир!");
