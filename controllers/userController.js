@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const User = require("../models/user");
 
 // Получение всех пользователей
@@ -12,12 +14,16 @@ exports.getAllUsers = async (req, res) => {
 
 // Получение пользователя по ID
 exports.getUserById = async (req, res) => {
+  const { userId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).send({ message: "Некорректный ID пользователя" });
+  }
+
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .send({ message: "Запрашиваемый пользователь не найден" });
+      return res.status(404).send({ message: "Пользователь не найден" });
     }
     res.status(200).json(user);
   } catch (err) {

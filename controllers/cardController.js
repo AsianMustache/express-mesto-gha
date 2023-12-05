@@ -48,15 +48,23 @@ exports.deleteCard = async (req, res) => {
 };
 
 exports.likeCard = async (req, res) => {
+  const { cardId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(cardId)) {
+    return res.status(400).send({ message: "Некорректный ID карточки" });
+  }
+
   try {
     const card = await Card.findByIdAndUpdate(
-      req.params.cardId,
+      cardId,
       { $addToSet: { likes: req.user._id } },
       { new: true }
     );
+
     if (!card) {
       return res.status(404).send({ message: "Карточка не найдена" });
     }
+
     res.status(200).json(card);
   } catch (err) {
     res.status(500).send({ message: "На сервере произошла ошибка" });
@@ -64,15 +72,23 @@ exports.likeCard = async (req, res) => {
 };
 
 exports.dislikeCard = async (req, res) => {
+  const { cardId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(cardId)) {
+    return res.status(400).send({ message: "Некорректный ID карточки" });
+  }
+
   try {
     const card = await Card.findByIdAndUpdate(
-      req.params.cardId,
+      cardId,
       { $pull: { likes: req.user._id } },
       { new: true }
     );
+
     if (!card) {
       return res.status(404).send({ message: "Карточка не найдена" });
     }
+
     res.status(200).json(card);
   } catch (err) {
     res.status(500).send({ message: "На сервере произошла ошибка" });
