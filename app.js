@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const userRoutes = require("./routes/userRoutes");
+const cardRoutes = require("./routes/cardRoutes");
 
 const app = express();
 const PORT = 3000;
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/users", userRoutes);
+app.use("/cards", cardRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send({ message: "Я сработал" });
