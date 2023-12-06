@@ -2,8 +2,9 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 
-const userRoutes = require("./routes/userRoutes");
-const cardRoutes = require("./routes/cardRoutes");
+// const userRoutes = require("./routes/userRoutes");
+// const cardRoutes = require("./routes/cardRoutes");
+const rootRouter = require("./routes/index");
 
 const app = express();
 const PORT = 3000;
@@ -30,8 +31,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/users", userRoutes);
-app.use("/cards", cardRoutes);
+app.use("/", rootRouter);
+
+// app.use("/users", userRoutes);
+// app.use("/cards", cardRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send({ message: "Я сработал" });

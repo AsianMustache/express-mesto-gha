@@ -1,14 +1,16 @@
 const mongoose = require("mongoose");
-
+const http2 = require("http2");
 const User = require("../models/user");
 
 // Получение всех пользователей
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({});
-    res.status(200).json({ data: users });
+    res.status(http2.constants.HTTP_STATUS_OK).json({ data: users });
   } catch (err) {
-    res.status(500).send({ message: "На сервере произошла ошибка" });
+    res
+      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      .send({ message: "На сервере произошла ошибка" });
   }
 };
 
@@ -16,18 +18,25 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   const { userId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    return res.status(400).send({ message: "Некорректный ID пользователя" });
-  }
-
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).send({ message: "Пользователь не найден" });
-    }
-    res.status(200).json(user);
+    const user = await User.findById(userId).orFail(
+      new Error("Пользователь не найден")
+    );
+    res.status(http2.constants.HTTP_STATUS_OK).json(user);
   } catch (err) {
-    res.status(500).send({ message: "На сервере произошла ошибка" });
+    if (err.message === "Пользователь не найден") {
+      return res
+        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+        .send({ message: err.message });
+    }
+    if (err.name === "CastError") {
+      return res
+        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+        .send({ message: "Неверный формат ID" });
+    }
+    res
+      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      .send({ message: "На сервере произошла ошибка" });
   }
 };
 
@@ -38,9 +47,13 @@ exports.createUser = async (req, res) => {
     res.status(201).json(newUser);
   } catch (err) {
     if (err.name === "ValidationError") {
-      return res.status(400).send({ message: "Переданы некорректные данные" });
+      return res
+        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+        .send({ message: "Переданы некорректные данные" });
     }
-    res.status(500).send({ message: "На сервере произошла ошибка" });
+    res
+      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      .send({ message: "На сервере произошла ошибка" });
   }
 };
 
@@ -50,18 +63,22 @@ exports.updateProfile = async (req, res) => {
       req.user._id,
       { $set: req.body },
       { new: true, runValidators: true }
-    );
-    if (!updatedUser) {
-      return res
-        .status(404)
-        .send({ message: "Запрашиваемый пользователь не найден" });
-    }
-    res.status(200).json(updatedUser);
+    ).orFail(new Error("Запрашиваемый пользователь не найден"));
+    res.status(http2.constants.HTTP_STATUS_OK).json(updatedUser);
   } catch (err) {
-    if (err.name === "ValidationError") {
-      return res.status(400).send({ message: "Переданы некорректные данные" });
+    if (err.message === "Запрашиваемый пользователь не найден") {
+      return res
+        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+        .send({ message: err.message });
     }
-    res.status(500).send({ message: "На сервере произошла ошибка" });
+    if (err.name === "ValidationError" || err.name === "CastError") {
+      return res
+        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+        .send({ message: "Неверный формат данных или ID пользователя" });
+    }
+    res
+      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      .send({ message: "На сервере произошла ошибка" });
   }
 };
 
@@ -72,17 +89,21 @@ exports.updateAvatar = async (req, res) => {
       req.user._id,
       { avatar: req.body.avatar },
       { new: true, runValidators: true }
-    );
-    if (!updatedUser) {
-      return res
-        .status(404)
-        .send({ message: "Запрашиваемый пользователь не найден" });
-    }
-    res.status(200).json(updatedUser);
+    ).orFail(new Error("Запрашиваемый пользователь не найден"));
+    res.status(http2.constants.HTTP_STATUS_OK).json(updatedUser);
   } catch (err) {
-    if (err.name === "ValidationError") {
-      return res.status(400).send({ message: "Переданы некорректные данные" });
+    if (err.message === "Запрашиваемый пользователь не найден") {
+      return res
+        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+        .send({ message: err.message });
     }
-    res.status(500).send({ message: "На сервере произошла ошибка" });
+    if (err.name === "ValidationError" || err.name === "CastError") {
+      return res
+        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+        .send({ message: "Неверный формат данных или ID пользователя" });
+    }
+    res
+      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      .send({ message: "На сервере произошла ошибка" });
   }
 };
