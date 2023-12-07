@@ -71,7 +71,7 @@ exports.updateProfile = async (req, res) => {
         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
         .send({ message: err.message });
     }
-    if (err.name === "ValidationError" || err.name === "CastError") {
+    if (err.name === "ValidationError") {
       return res
         .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
         .send({ message: "Неверный формат данных или ID пользователя" });
@@ -97,7 +97,7 @@ exports.updateAvatar = async (req, res) => {
         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
         .send({ message: err.message });
     }
-    if (err.name === "ValidationError" || err.name === "CastError") {
+    if (err.name === "ValidationError") {
       return res
         .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
         .send({ message: "Неверный формат данных или ID пользователя" });

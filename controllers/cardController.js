@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const http2 = require("http2");
 const Card = require("../models/card");
 
@@ -35,12 +34,6 @@ exports.createCard = async (req, res) => {
 exports.deleteCard = async (req, res) => {
   const { cardId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(cardId)) {
-    return res
-      .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-      .send({ message: "Некорректный ID карточки" });
-  }
-
   try {
     const card = await Card.findById(cardId);
     if (!card) {
@@ -68,12 +61,6 @@ exports.deleteCard = async (req, res) => {
 
 exports.likeCard = async (req, res) => {
   const { cardId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(cardId)) {
-    return res
-      .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-      .send({ message: "Некорректный ID карточки" });
-  }
 
   try {
     const card = await Card.findByIdAndUpdate(
@@ -103,12 +90,6 @@ exports.likeCard = async (req, res) => {
 
 exports.dislikeCard = async (req, res) => {
   const { cardId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(cardId)) {
-    return res
-      .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-      .send({ message: "Некорректный ID карточки" });
-  }
 
   try {
     const card = await Card.findByIdAndUpdate(

@@ -8,6 +8,8 @@ const rootRouter = require("./routes/index");
 
 const app = express();
 const PORT = 3000;
+const HTTP_OK = 200;
+const HTTP_NOT_FOUND = 404;
 
 mongoose
   .connect("mongodb://localhost:27017/mestodb", {
@@ -37,11 +39,11 @@ app.use("/", rootRouter);
 // app.use("/cards", cardRoutes);
 
 app.get("/", (req, res) => {
-  res.status(200).send({ message: "Я сработал" });
+  res.status(HTTP_OK).send({ message: "Я сработал" });
 });
 
 app.use((req, res) => {
-  res.status(404).json({ message: "Страница не найдена" });
+  res.status(HTTP_NOT_FOUND).json({ message: "Страница не найдена" });
 });
 
 app.listen(PORT, () => {
