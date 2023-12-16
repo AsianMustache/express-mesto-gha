@@ -8,9 +8,9 @@ const createUserSchema = Joi.object({
   password: Joi.string().min(6).required(),
   name: Joi.string().min(2).max(30),
   about: Joi.string().min(2).max(30),
-  avatar: Joi.string()
-    .pattern(avatarUrlRegex)
-    .message("Некорректный URL аватара"),
+  avatar: Joi.string().pattern(avatarUrlRegex).messages({
+    "string.pattern.base": "Некорректный URL аватара",
+  }),
 });
 
 const updateUserSchema = Joi.object({
@@ -19,10 +19,10 @@ const updateUserSchema = Joi.object({
 });
 
 const updateAvatarSchema = Joi.object({
-  avatar: Joi.string()
-    .pattern(avatarUrlRegex)
-    .required()
-    .message("Некорректный URL аватара"),
+  avatar: Joi.string().pattern(avatarUrlRegex).required().messages({
+    "string.pattern.base": "Некорректный URL аватара",
+    "any.required": "URL аватара обязателен",
+  }),
 });
 
 module.exports = {
