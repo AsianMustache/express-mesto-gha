@@ -125,7 +125,7 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res
         .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
@@ -155,5 +155,29 @@ exports.login = async (req, res) => {
     res
       .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .send({ message: "На сервере произошла ошибка" });
+  }
+};
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res
+        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+        .send({ message: "Пользователь не найден" });
+    }
+
+    res.status(http2.constants.HTTP_STATUS_OK).json({
+      name: user.name,
+      email: user.email,
+      about: user.about,
+      avatar: user.avatar,
+    });
+  } catch (error) {
+    res
+      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      .send({ message: "Ошибка на сервере" });
   }
 };

@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
       value: true,
       message: "Поле password является обязательным",
     },
+    select: false,
   },
 });
 

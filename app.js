@@ -3,6 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { login, createUser } = require("./controllers/userController");
 const rootRouter = require("./routes/index");
+const userRouter = require("./routes/userRoutes");
+const auth = require("./middlewares/auth");
 
 const app = express();
 const PORT = 3000;
@@ -23,18 +25,21 @@ mongoose
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "656f3a96e42bc2e806180894", // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: "656f3a96e42bc2e806180894", // вставьте сюда _id созданного в предыдущем пункте пользователя
+//   };
 
-  next();
-});
+//   next();
+// });
 
 app.post("/signup", createUser);
 app.post("/signin", login);
 
+app.use(auth);
+
 app.use("/", rootRouter);
+app.use("/users", userRouter);
 
 app.get("/", (req, res) => {
   res.status(HTTP_OK).send({ message: "Я сработал" });

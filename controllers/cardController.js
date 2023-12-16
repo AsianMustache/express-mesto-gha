@@ -31,8 +31,36 @@ exports.createCard = async (req, res) => {
   }
 };
 
+// exports.deleteCard = async (req, res) => {
+//   const { cardId } = req.params;
+
+//   try {
+//     const card = await Card.findById(cardId);
+//     if (!card) {
+//       return res
+//         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+//         .send({ message: "Карточка не найдена" });
+//     }
+
+//     await Card.deleteOne({ _id: cardId });
+//     res
+//       .status(http2.constants.HTTP_STATUS_OK)
+//       .send({ message: "Карточка удалена" });
+//   } catch (err) {
+//     if (err.name === "CastError") {
+//       return res
+//         .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+//         .send({ message: "Неверный формат ID карточки" });
+//     }
+//     console.error("Ошибка при удалении карточки:", err);
+//     res
+//       .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+//       .send({ message: "На сервере произошла ошибка" });
+//   }
+// };
 exports.deleteCard = async (req, res) => {
   const { cardId } = req.params;
+  const userId = req.user._id;
 
   try {
     const card = await Card.findById(cardId);
@@ -40,6 +68,13 @@ exports.deleteCard = async (req, res) => {
       return res
         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
         .send({ message: "Карточка не найдена" });
+    }
+
+    // Проверяем, принадлежит ли карточка пользователю, делающему запрос
+    if (card.owner.toString() !== userId) {
+      return res
+        .status(http2.constants.HTTP_STATUS_FORBIDDEN)
+        .send({ message: "Нет прав на удаление этой карточки" });
     }
 
     await Card.deleteOne({ _id: cardId });
