@@ -5,19 +5,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Получение всех пользователей
-exports.getAllUsers = async (req, res) => {
+exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
     res.status(http2.constants.HTTP_STATUS_OK).json({ data: users });
   } catch (err) {
-    res
-      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .send({ message: "На сервере произошла ошибка" });
+    // res
+    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    //   .send({ message: "На сервере произошла ошибка" });
+    next(err);
   }
 };
 
 // Получение пользователя по ID
-exports.getUserById = async (req, res) => {
+exports.getUserById = async (req, res, next) => {
   const { userId } = req.params;
 
   try {
@@ -26,23 +27,24 @@ exports.getUserById = async (req, res) => {
     );
     res.status(http2.constants.HTTP_STATUS_OK).json(user);
   } catch (err) {
-    if (err.message === "Пользователь не найден") {
-      return res
-        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-        .send({ message: err.message });
-    }
-    if (err.name === "CastError") {
-      return res
-        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-        .send({ message: "Неверный формат ID" });
-    }
-    res
-      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .send({ message: "На сервере произошла ошибка" });
+    // if (err.message === "Пользователь не найден") {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+    //     .send({ message: err.message });
+    // }
+    // if (err.name === "CastError") {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+    //     .send({ message: "Неверный формат ID" });
+    // }
+    // res
+    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    //   .send({ message: "На сервере произошла ошибка" });
+    next(err);
   }
 };
 
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res, next) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const newUser = await User.create({
@@ -59,18 +61,19 @@ exports.createUser = async (req, res) => {
       avatar: newUser.avatar,
     });
   } catch (err) {
-    if (err.name === "ValidationError") {
-      return res
-        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-        .send({ message: "Переданы некорректные данные" });
-    }
-    res
-      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .send({ message: "На сервере произошла ошибка" });
+    // if (err.name === "ValidationError") {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+    //     .send({ message: "Переданы некорректные данные" });
+    // }
+    // res
+    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    //   .send({ message: "На сервере произошла ошибка" });
+    next(err);
   }
 };
 
-exports.updateProfile = async (req, res) => {
+exports.updateProfile = async (req, res, next) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
@@ -79,24 +82,25 @@ exports.updateProfile = async (req, res) => {
     ).orFail(new Error("Запрашиваемый пользователь не найден"));
     res.status(http2.constants.HTTP_STATUS_OK).json(updatedUser);
   } catch (err) {
-    if (err.message === "Запрашиваемый пользователь не найден") {
-      return res
-        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-        .send({ message: err.message });
-    }
-    if (err.name === "ValidationError") {
-      return res
-        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-        .send({ message: "Неверный формат данных или ID пользователя" });
-    }
-    res
-      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .send({ message: "На сервере произошла ошибка" });
+    // if (err.message === "Запрашиваемый пользователь не найден") {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+    //     .send({ message: err.message });
+    // }
+    // if (err.name === "ValidationError") {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+    //     .send({ message: "Неверный формат данных или ID пользователя" });
+    // }
+    // res
+    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    //   .send({ message: "На сервере произошла ошибка" });
+    next(err);
   }
 };
 
 // Обновление аватара пользователя
-exports.updateAvatar = async (req, res) => {
+exports.updateAvatar = async (req, res, next) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
@@ -105,23 +109,24 @@ exports.updateAvatar = async (req, res) => {
     ).orFail(new Error("Запрашиваемый пользователь не найден"));
     res.status(http2.constants.HTTP_STATUS_OK).json(updatedUser);
   } catch (err) {
-    if (err.message === "Запрашиваемый пользователь не найден") {
-      return res
-        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-        .send({ message: err.message });
-    }
-    if (err.name === "ValidationError") {
-      return res
-        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-        .send({ message: "Неверный формат данных или ID пользователя" });
-    }
-    res
-      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .send({ message: "На сервере произошла ошибка" });
+    // if (err.message === "Запрашиваемый пользователь не найден") {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+    //     .send({ message: err.message });
+    // }
+    // if (err.name === "ValidationError") {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+    //     .send({ message: "Неверный формат данных или ID пользователя" });
+    // }
+    // res
+    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    //   .send({ message: "На сервере произошла ошибка" });
+    next(err);
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -152,13 +157,14 @@ exports.login = async (req, res) => {
       .status(http2.constants.HTTP_STATUS_OK)
       .send({ message: "Аутентификация прошла успешно" });
   } catch (err) {
-    res
-      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .send({ message: "На сервере произошла ошибка" });
+    // res
+    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    //   .send({ message: "На сервере произошла ошибка" });
+    next(err);
   }
 };
 
-exports.getCurrentUser = async (req, res) => {
+exports.getCurrentUser = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
@@ -176,8 +182,9 @@ exports.getCurrentUser = async (req, res) => {
       avatar: user.avatar,
     });
   } catch (error) {
-    res
-      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-      .send({ message: "Ошибка на сервере" });
+    // res
+    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    //   .send({ message: "Ошибка на сервере" });
+    next(err);
   }
 };

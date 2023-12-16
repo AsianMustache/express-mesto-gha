@@ -5,6 +5,7 @@ const { login, createUser } = require("./controllers/userController");
 const rootRouter = require("./routes/index");
 const userRouter = require("./routes/userRoutes");
 const auth = require("./middlewares/auth");
+const errors = require("./middlewares/errors");
 
 const app = express();
 const PORT = 3000;
@@ -48,6 +49,8 @@ app.get("/", (req, res) => {
 app.use((req, res) => {
   res.status(HTTP_NOT_FOUND).json({ message: "Страница не найдена" });
 });
+
+app.use(errors);
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
