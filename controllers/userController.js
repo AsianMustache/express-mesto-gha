@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const http2 = require("http2");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 // Получение всех пользователей
 exports.getAllUsers = async (req, res) => {
@@ -43,8 +44,20 @@ exports.getUserById = async (req, res) => {
 // Создание нового пользователя
 exports.createUser = async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
-    res.status(201).json(newUser);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newUser = await User.create({
+      name: req.body.name,
+      about: req.body.about,
+      avatar: req.body.avatar,
+      email: req.body.email,
+      password: hashedPassword,
+    });
+    res.status(201).json({
+      email: newUser.email,
+      name: newUser.name,
+      about: newUser.about,
+      avatar: newUser.avatar,
+    });
   } catch (err) {
     if (err.name === "ValidationError") {
       return res

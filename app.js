@@ -2,8 +2,6 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 
-// const userRoutes = require("./routes/userRoutes");
-// const cardRoutes = require("./routes/cardRoutes");
 const rootRouter = require("./routes/index");
 
 const app = express();
@@ -34,9 +32,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/", rootRouter);
-
-// app.use("/users", userRoutes);
-// app.use("/cards", cardRoutes);
 
 app.get("/", (req, res) => {
   res.status(HTTP_OK).send({ message: "Я сработал" });
