@@ -1,7 +1,7 @@
 const express = require("express");
 
 const mongoose = require("mongoose");
-
+const { login, createUser } = require("./controllers/userController");
 const rootRouter = require("./routes/index");
 
 const app = express();
@@ -30,6 +30,9 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.post("/signup", createUser);
+app.post("/signin", login);
 
 app.use("/", rootRouter);
 

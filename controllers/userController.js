@@ -42,7 +42,6 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// Создание нового пользователя
 exports.createUser = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -126,7 +125,6 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Найти пользователя по email
     const user = await User.findOne({ email });
     if (!user) {
       return res
@@ -134,7 +132,6 @@ exports.login = async (req, res) => {
         .send({ message: "Неверные почта или пароль" });
     }
 
-    // Проверить пароль
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
@@ -142,12 +139,10 @@ exports.login = async (req, res) => {
         .send({ message: "Неверные почта или пароль" });
     }
 
-    // Создать JWT
     const token = jwt.sign({ _id: user._id }, "Секретный_ключ", {
       expiresIn: "7d",
     });
 
-    // Отправить токен в куке или в теле ответа
     res.cookie("jwt", token, {
       maxAge: 3600000 * 24 * 7,
       httpOnly: true,
