@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const http2 = require("http2");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // Получение всех пользователей
 exports.getAllUsers = async (req, res) => {
@@ -115,6 +116,47 @@ exports.updateAvatar = async (req, res) => {
         .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
         .send({ message: "Неверный формат данных или ID пользователя" });
     }
+    res
+      .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      .send({ message: "На сервере произошла ошибка" });
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Найти пользователя по email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
+        .send({ message: "Неверные почта или пароль" });
+    }
+
+    // Проверить пароль
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res
+        .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
+        .send({ message: "Неверные почта или пароль" });
+    }
+
+    // Создать JWT
+    const token = jwt.sign({ _id: user._id }, "Секретный_ключ", {
+      expiresIn: "7d",
+    });
+
+    // Отправить токен в куке или в теле ответа
+    res.cookie("jwt", token, {
+      maxAge: 3600000 * 24 * 7,
+      httpOnly: true,
+    });
+
+    res
+      .status(http2.constants.HTTP_STATUS_OK)
+      .send({ message: "Аутентификация прошла успешно" });
+  } catch (err) {
     res
       .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
       .send({ message: "На сервере произошла ошибка" });
