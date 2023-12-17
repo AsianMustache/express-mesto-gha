@@ -17,6 +17,11 @@ exports.createCard = async (req, res, next) => {
     const card = await Card.create({ name, link, owner });
     res.status(http2.constants.HTTP_STATUS_CREATED).json(card);
   } catch (err) {
+    if (err.name === "ValidationError") {
+      return res
+        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+        .json({ message: err.message });
+    }
     next(err);
   }
 };
