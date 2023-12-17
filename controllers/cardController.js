@@ -6,9 +6,6 @@ exports.getCards = async (req, res, next) => {
     const cards = await Card.find({});
     res.status(http2.constants.HTTP_STATUS_OK).json({ data: cards });
   } catch (err) {
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -20,46 +17,10 @@ exports.createCard = async (req, res, next) => {
     const card = await Card.create({ name, link, owner });
     res.status(http2.constants.HTTP_STATUS_CREATED).json(card);
   } catch (err) {
-    // if (err.name === "ValidationError") {
-    //   res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Переданы некорректные данные" });
-    // } else {
-    //   res
-    //     .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //     .send({ message: "На сервере произошла ошибка" });
-    // }
     next(err);
   }
 };
 
-// exports.deleteCard = async (req, res) => {
-//   const { cardId } = req.params;
-
-//   try {
-//     const card = await Card.findById(cardId);
-//     if (!card) {
-//       return res
-//         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-//         .send({ message: "Карточка не найдена" });
-//     }
-
-//     await Card.deleteOne({ _id: cardId });
-//     res
-//       .status(http2.constants.HTTP_STATUS_OK)
-//       .send({ message: "Карточка удалена" });
-//   } catch (err) {
-//     if (err.name === "CastError") {
-//       return res
-//         .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-//         .send({ message: "Неверный формат ID карточки" });
-//     }
-//     console.error("Ошибка при удалении карточки:", err);
-//     res
-//       .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-//       .send({ message: "На сервере произошла ошибка" });
-//   }
-// };
 exports.deleteCard = async (req, res, next) => {
   const { cardId } = req.params;
   const userId = req.user._id;
@@ -84,15 +45,6 @@ exports.deleteCard = async (req, res, next) => {
       .status(http2.constants.HTTP_STATUS_OK)
       .send({ message: "Карточка удалена" });
   } catch (err) {
-    // if (err.name === "CastError") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Неверный формат ID карточки" });
-    // }
-    // console.error("Ошибка при удалении карточки:", err);
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -115,14 +67,6 @@ exports.likeCard = async (req, res, next) => {
 
     res.status(http2.constants.HTTP_STATUS_OK).json(card);
   } catch (err) {
-    // if (err.name === "CastError") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Неверный формат ID карточки" });
-    // }
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -145,14 +89,6 @@ exports.dislikeCard = async (req, res, next) => {
 
     res.status(http2.constants.HTTP_STATUS_OK).json(card);
   } catch (err) {
-    // if (err.name === "CastError") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Неверный формат ID карточки" });
-    // }
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };

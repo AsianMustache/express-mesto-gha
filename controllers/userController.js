@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const http2 = require("http2");
-const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 // Получение всех пользователей
 exports.getAllUsers = async (req, res, next) => {
@@ -10,9 +10,6 @@ exports.getAllUsers = async (req, res, next) => {
     const users = await User.find({});
     res.status(http2.constants.HTTP_STATUS_OK).json({ data: users });
   } catch (err) {
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -27,19 +24,6 @@ exports.getUserById = async (req, res, next) => {
     );
     res.status(http2.constants.HTTP_STATUS_OK).json(user);
   } catch (err) {
-    // if (err.message === "Пользователь не найден") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-    //     .send({ message: err.message });
-    // }
-    // if (err.name === "CastError") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Неверный формат ID" });
-    // }
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -61,14 +45,6 @@ exports.createUser = async (req, res, next) => {
       avatar: newUser.avatar,
     });
   } catch (err) {
-    // if (err.name === "ValidationError") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Переданы некорректные данные" });
-    // }
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -82,19 +58,6 @@ exports.updateProfile = async (req, res, next) => {
     ).orFail(new Error("Запрашиваемый пользователь не найден"));
     res.status(http2.constants.HTTP_STATUS_OK).json(updatedUser);
   } catch (err) {
-    // if (err.message === "Запрашиваемый пользователь не найден") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-    //     .send({ message: err.message });
-    // }
-    // if (err.name === "ValidationError") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Неверный формат данных или ID пользователя" });
-    // }
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -109,19 +72,6 @@ exports.updateAvatar = async (req, res, next) => {
     ).orFail(new Error("Запрашиваемый пользователь не найден"));
     res.status(http2.constants.HTTP_STATUS_OK).json(updatedUser);
   } catch (err) {
-    // if (err.message === "Запрашиваемый пользователь не найден") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-    //     .send({ message: err.message });
-    // }
-    // if (err.name === "ValidationError") {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Неверный формат данных или ID пользователя" });
-    // }
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -157,9 +107,6 @@ exports.login = async (req, res, next) => {
       .status(http2.constants.HTTP_STATUS_OK)
       .send({ message: "Аутентификация прошла успешно" });
   } catch (err) {
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "На сервере произошла ошибка" });
     next(err);
   }
 };
@@ -182,9 +129,6 @@ exports.getCurrentUser = async (req, res, next) => {
       avatar: user.avatar,
     });
   } catch (error) {
-    // res
-    //   .status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR)
-    //   .send({ message: "Ошибка на сервере" });
     next(err);
   }
 };
