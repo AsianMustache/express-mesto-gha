@@ -15,7 +15,7 @@ const auth = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, "Секретный_ключ");
+    payload = jwt.verify(token, "dev_secret");
   } catch (err) {
     return res
       .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)

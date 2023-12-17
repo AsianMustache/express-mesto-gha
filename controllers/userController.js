@@ -94,7 +94,7 @@ exports.login = async (req, res, next) => {
         .send({ message: "Неверные почта или пароль" });
     }
 
-    const token = jwt.sign({ _id: user._id }, "Секретный_ключ", {
+    const token = jwt.sign({ _id: user._id }, "dev_secret", {
       expiresIn: "7d",
     });
 
