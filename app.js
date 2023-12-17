@@ -30,12 +30,12 @@ app.use(express.json());
 
 app.post("/signup", validate(createUserSchema), createUser);
 app.post("/signin", validate(signInSchema), login);
-app.use("/users", userRouter);
 
 app.use(auth);
 
 app.use("/", rootRouter);
 
+app.use("/users", userRouter);
 app.get("/", (req, res) => {
   res.status(HTTP_OK).send({ message: "Я сработал" });
 });
