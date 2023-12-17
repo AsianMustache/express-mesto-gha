@@ -30,20 +30,20 @@ exports.createCard = async (req, res, next) => {
 
 exports.deleteCard = async (req, res, next) => {
   const { cardId } = req.params;
-  const userId = req.user._id;
+
+  if (!mongoose.Types.ObjectId.isValid(cardId)) {
+    return res
+      .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+      .send({ message: "Некорректный ID карточки" });
+  }
 
   try {
     const card = await Card.findById(cardId);
+
     if (!card) {
       return res
         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
         .send({ message: "Карточка не найдена" });
-    }
-
-    if (card.owner.toString() !== userId) {
-      return res
-        .status(http2.constants.HTTP_STATUS_FORBIDDEN)
-        .send({ message: "Нет прав на удаление этой карточки" });
     }
 
     await Card.deleteOne({ _id: cardId });
