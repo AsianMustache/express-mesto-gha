@@ -26,14 +26,6 @@ mongoose
 
 app.use(express.json());
 
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: "656f3a96e42bc2e806180894", // вставьте сюда _id созданного в предыдущем пункте пользователя
-//   };
-
-//   next();
-// });
-
 // app.post("/signup", createUser);
 app.post("/signin", login);
 
