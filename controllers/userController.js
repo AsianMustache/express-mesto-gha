@@ -105,7 +105,11 @@ exports.login = async (req, res, next) => {
 
     res
       .status(http2.constants.HTTP_STATUS_OK)
-      .send({ message: "Аутентификация прошла успешно" });
+      .send({
+        data: { email: user.email, id: user._id },
+        token,
+        message: "Аутентификация прошла успешно",
+      });
   } catch (err) {
     next(err);
   }
