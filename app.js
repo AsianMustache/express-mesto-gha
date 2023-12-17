@@ -7,7 +7,7 @@ const userRouter = require("./routes/userRoutes");
 const auth = require("./middlewares/auth");
 const errors = require("./middlewares/errors");
 const { createUserSchema } = require("./validation/validation");
-const { validate } = require("./routes/userRoutes");
+const validate = require("./middlewares/validate");
 
 const app = express();
 const PORT = 3000;
