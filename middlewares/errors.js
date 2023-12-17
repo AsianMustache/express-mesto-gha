@@ -4,14 +4,6 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
 module.exports = (err, req, res, next) => {
   // Обработка ошибки дублирования email
-
-  console.error("Ошибка:", {
-    message: err.message,
-    stack: err.stack,
-    code: err.code,
-    name: err.name,
-  });
-
   if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
     return res
       .status(http2.constants.HTTP_STATUS_CONFLICT)
