@@ -17,6 +17,7 @@ const auth = (req, res, next) => {
   try {
     payload = jwt.verify(token, "dev_secret");
   } catch (err) {
+    console.error("auth middleware: Ошибка", err);
     return res
       .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
       .send({ message: "Неверный токен" });

@@ -115,6 +115,7 @@ exports.login = async (req, res, next) => {
 
 exports.getCurrentUser = async (req, res, next) => {
   try {
+    console.log("getCurrentUser: Получение пользователя", req.user);
     if (!req.user || !req.user._id) {
       throw new Error("Пользователь не авторизован");
     }

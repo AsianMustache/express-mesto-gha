@@ -36,7 +36,6 @@ app.use(auth);
 app.use("/", rootRouter);
 
 app.use("/users", userRouter);
-app.use("/users/me", userRouter);
 app.get("/", (req, res) => {
   res.status(HTTP_OK).send({ message: "Я сработал" });
 });

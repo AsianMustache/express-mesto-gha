@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npx eslint .",
-    "dev": "nodemon app.js"
+    "dev": "nodemon --inspect -- app.js"
   },
   "eslintConfig": {
     "extends": [
