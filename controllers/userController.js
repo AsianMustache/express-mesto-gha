@@ -15,13 +15,42 @@ exports.getAllUsers = async (req, res, next) => {
 };
 
 // Получение пользователя по ID
-exports.getUserById = async (req, res, next) => {
-  const { userId } = req.params;
+// exports.getUserById = async (req, res, next) => {
+//   const { userId } = req.params;
 
+//   try {
+//     const user = await User.findById(userId).orFail(
+//       new Error("Пользователь не найден")
+//     );
+//     res.status(http2.constants.HTTP_STATUS_OK).json(user);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+exports.getUserById = async (req, res, next) => {
   try {
-    const user = await User.findById(userId).orFail(
-      new Error("Пользователь не найден")
-    );
+    let userId;
+
+    if (req.params.userId === "me" && req.user) {
+      userId = req.user._id;
+    } else {
+      userId = req.params.userId;
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res
+        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+        .send({ message: "Некорректный ID пользователя" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+        .send({ message: "Пользователь не найден" });
+    }
+
     res.status(http2.constants.HTTP_STATUS_OK).json(user);
   } catch (err) {
     next(err);
