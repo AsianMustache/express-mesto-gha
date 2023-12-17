@@ -26,7 +26,7 @@ mongoose
 
 app.use(express.json());
 
-// app.post("/signup", createUser);
+app.post("/signup", createUser);
 app.post("/signin", login);
 
 app.use(auth);

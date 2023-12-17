@@ -18,7 +18,7 @@ const validate = (schema) => (req, res, next) => {
   }
 };
 
-router.post("/signup", validate(createUserSchema), userController.createUser);
+// router.post("/signup", validate(createUserSchema), userController.createUser);
 router.get("/", userController.getAllUsers);
 router.get("/:userId", userController.getUserById);
 // router.post("/", userController.createUser);
