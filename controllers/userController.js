@@ -103,13 +103,11 @@ exports.login = async (req, res, next) => {
       httpOnly: true,
     });
 
-    res
-      .status(http2.constants.HTTP_STATUS_OK)
-      .send({
-        data: { email: user.email, id: user._id },
-        token,
-        message: "Аутентификация прошла успешно",
-      });
+    res.status(http2.constants.HTTP_STATUS_OK).send({
+      data: { email: user.email, id: user._id },
+      token,
+      message: "Аутентификация прошла успешно",
+    });
   } catch (err) {
     next(err);
   }
@@ -117,6 +115,10 @@ exports.login = async (req, res, next) => {
 
 exports.getCurrentUser = async (req, res, next) => {
   try {
+    if (!req.user || !req.user._id) {
+      throw new Error("Пользователь не авторизован");
+    }
+
     const userId = req.user._id;
     const user = await User.findById(userId);
 
@@ -136,3 +138,25 @@ exports.getCurrentUser = async (req, res, next) => {
     next(error);
   }
 };
+
+// exports.getCurrentUser = async (req, res, next) => {
+//   try {
+//     const userId = req.user._id;
+//     const user = await User.findById(userId);
+
+//     if (!user) {
+//       return res
+//         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+//         .send({ message: "Пользователь не найден" });
+//     }
+
+//     res.status(http2.constants.HTTP_STATUS_OK).json({
+//       name: user.name,
+//       email: user.email,
+//       about: user.about,
+//       avatar: user.avatar,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
