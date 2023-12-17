@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const http2 = require("http2");
 const Card = require("../models/card");
 
@@ -38,7 +40,6 @@ exports.deleteCard = async (req, res, next) => {
         .send({ message: "Карточка не найдена" });
     }
 
-    // Проверяем, принадлежит ли карточка пользователю, делающему запрос
     if (card.owner.toString() !== userId) {
       return res
         .status(http2.constants.HTTP_STATUS_FORBIDDEN)
@@ -56,6 +57,12 @@ exports.deleteCard = async (req, res, next) => {
 
 exports.likeCard = async (req, res, next) => {
   const { cardId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(cardId)) {
+    return res
+      .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+      .send({ message: "Некорректный ID карточки" });
+  }
 
   try {
     const card = await Card.findByIdAndUpdate(
@@ -78,6 +85,12 @@ exports.likeCard = async (req, res, next) => {
 
 exports.dislikeCard = async (req, res, next) => {
   const { cardId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(cardId)) {
+    return res
+      .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+      .send({ message: "Некорректный ID карточки" });
+  }
 
   try {
     const card = await Card.findByIdAndUpdate(
