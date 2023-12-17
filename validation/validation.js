@@ -25,8 +25,14 @@ const updateAvatarSchema = Joi.object({
   }),
 });
 
+const signInSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
 module.exports = {
   createUserSchema,
   updateUserSchema,
   updateAvatarSchema,
+  signInSchema,
 };
