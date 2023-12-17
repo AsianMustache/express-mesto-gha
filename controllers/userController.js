@@ -129,6 +129,6 @@ exports.getCurrentUser = async (req, res, next) => {
       avatar: user.avatar,
     });
   } catch (error) {
-    next(err);
+    next(error);
   }
 };

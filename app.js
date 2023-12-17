@@ -46,11 +46,11 @@ app.get("/", (req, res) => {
   res.status(HTTP_OK).send({ message: "Я сработал" });
 });
 
+app.use(errors);
+
 app.use((req, res) => {
   res.status(HTTP_NOT_FOUND).json({ message: "Страница не найдена" });
 });
-
-app.use(errors);
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
