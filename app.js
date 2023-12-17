@@ -34,7 +34,7 @@ app.use(express.json());
 //   next();
 // });
 
-app.post("/signup", createUser);
+// app.post("/signup", createUser);
 app.post("/signin", login);
 
 app.use(auth);
