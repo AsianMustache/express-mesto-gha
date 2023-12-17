@@ -6,6 +6,8 @@ const rootRouter = require("./routes/index");
 const userRouter = require("./routes/userRoutes");
 const auth = require("./middlewares/auth");
 const errors = require("./middlewares/errors");
+const { createUserSchema } = require("./validation/validation");
+const { validate } = require("./routes/userRoutes");
 
 const app = express();
 const PORT = 3000;
@@ -26,7 +28,7 @@ mongoose
 
 app.use(express.json());
 
-app.post("/signup", createUser);
+app.post("/signup", validate(createUserSchema), createUser);
 app.post("/signin", login);
 
 app.use(auth);
