@@ -19,7 +19,7 @@ exports.createCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === "ValidationError") {
       return res
-        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
         .json({ message: err.message });
     }
     next(err);
