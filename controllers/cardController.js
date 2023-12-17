@@ -46,6 +46,12 @@ exports.deleteCard = async (req, res, next) => {
         .send({ message: "Карточка не найдена" });
     }
 
+    if (card.owner.toString() !== req.user._id.toString()) {
+      return res
+        .status(http2.constants.HTTP_STATUS_FORBIDDEN)
+        .send({ message: "Недостаточно прав для удаления этой карточки" });
+    }
+
     await Card.deleteOne({ _id: cardId });
     res
       .status(http2.constants.HTTP_STATUS_OK)
