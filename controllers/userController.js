@@ -14,20 +14,6 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-// Получение пользователя по ID
-// exports.getUserById = async (req, res, next) => {
-//   const { userId } = req.params;
-
-//   try {
-//     const user = await User.findById(userId).orFail(
-//       new Error("Пользователь не найден")
-//     );
-//     res.status(http2.constants.HTTP_STATUS_OK).json(user);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
 exports.getUserById = async (req, res, next) => {
   try {
     let userId;
@@ -168,25 +154,3 @@ exports.getCurrentUser = async (req, res, next) => {
     next(error);
   }
 };
-
-// exports.getCurrentUser = async (req, res, next) => {
-//   try {
-//     const userId = req.user._id;
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//       return res
-//         .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-//         .send({ message: "Пользователь не найден" });
-//     }
-
-//     res.status(http2.constants.HTTP_STATUS_OK).json({
-//       name: user.name,
-//       email: user.email,
-//       about: user.about,
-//       avatar: user.avatar,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
