@@ -26,17 +26,13 @@
 const validate = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
-    // Сбор всех сообщений об ошибках от Joi
-    const errors = error.details.map((err) => {
-      return {
-        field: err.path.join("."),
-        message: err.message.replace(/["']/g, ""),
-      };
-    });
+    const errors = error.details.map((err) => ({
+      field: err.path.join("."),
+      message: `Поле '${err.path.join(".")}' ${err.message}`,
+    }));
 
-    // Отправка кастомного сообщения об ошибке
     res.status(400).json({
-      message: "Ошибка валидации",
+      message: "Ошибка валидации данных",
       errors: errors,
     });
   } else {
