@@ -26,10 +26,14 @@
 const validate = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
-    const errors = error.details.map((err) => ({
-      field: err.path.join("."),
-      message: `Поле '${err.path.join(".")}' ${err.message}`,
-    }));
+    const errors = error.details.map((err) => {
+      // Удаление лишних кавычек из сообщения Joi и форматирование сообщения
+      const message = err.message.replace(/['"]/g, "");
+      return {
+        field: err.path.join("."),
+        message: `Поле '${err.path.join(".")}' ${message}`,
+      };
+    });
 
     res.status(400).json({
       message: "Ошибка валидации данных",
@@ -39,7 +43,5 @@ const validate = (schema) => (req, res, next) => {
     next();
   }
 };
-
-module.exports = validate;
 
 module.exports = validate;
