@@ -6,16 +6,16 @@ const avatarUrlRegex =
 const createUserSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
-  name: Joi.string().min(2).max(30),
-  about: Joi.string().min(2).max(30),
+  name: Joi.string().min(3).max(30),
+  about: Joi.string().min(3).max(30),
   avatar: Joi.string().pattern(avatarUrlRegex).messages({
     "string.pattern.base": "Некорректный URL аватара",
   }),
 });
 
 const updateUserSchema = Joi.object({
-  name: Joi.string().min(2).max(30),
-  about: Joi.string().min(2).max(30),
+  name: Joi.string().min(3).max(30),
+  about: Joi.string().min(3).max(30),
 });
 
 const updateAvatarSchema = Joi.object({
