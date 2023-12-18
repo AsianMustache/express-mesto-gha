@@ -31,7 +31,7 @@ const validate = (schema) => (req, res, next) => {
       const message = err.message.replace(/['"]/g, "");
       return {
         field: err.path.join("."),
-        message: `Поле '${err.path.join(".")}' ${message}`,
+        message: "Ошибка - name или about должны быть не менее 2 символов",
       };
     });
 
