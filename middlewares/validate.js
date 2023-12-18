@@ -36,7 +36,7 @@ const validate = (schema) => (req, res, next) => {
 
     // Отправка кастомного сообщения об ошибке
     res.status(400).json({
-      message: "Ошибка валидации поймана при помощи Joi",
+      message: "Ошибка валидации",
       errors: errors,
     });
   } else {
