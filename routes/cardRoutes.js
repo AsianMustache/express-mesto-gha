@@ -1,7 +1,7 @@
 const express = require("express");
 const { celebrate, Joi } = require("celebrate");
 const cardController = require("../controllers/cardController");
-const { createCardSchema } = require("../validation/validation");
+const { createCardSchema, cardIdSchema } = require("../validation/validation");
 
 const router = express.Router();
 
@@ -13,7 +13,13 @@ router.post(
   cardController.createCard
 );
 router.delete("/:cardId", cardController.deleteCard);
-router.put("/:cardId/likes", cardController.likeCard);
-router.delete("/:cardId/likes", cardController.dislikeCard);
+router.put("/:cardId/likes", celebrate(cardIdSchema), cardController.likeCard);
+// router.put("/:cardId/likes", cardController.likeCard);
+// router.delete("/:cardId/likes", cardController.dislikeCard);
+router.delete(
+  "/:cardId/likes",
+  celebrate(cardIdSchema),
+  cardController.dislikeCard
+);
 
 module.exports = router;

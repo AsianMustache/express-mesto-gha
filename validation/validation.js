@@ -46,6 +46,16 @@ const createCardSchema = Joi.object({
   link: Joi.string().uri().required(),
 });
 
+const cardIdSchema = {
+  [Segments.PARAMS]: Joi.object().keys({
+    cardId: Joi.string().alphanum().length(24).required().messages({
+      "string.length": "Некорректный ID карточки",
+      "string.alphanum": "Некорректный ID карточки",
+      "any.required": "ID карточки обязателен",
+    }),
+  }),
+};
+
 module.exports = {
   createUserSchema,
   updateUserSchema,
@@ -53,4 +63,5 @@ module.exports = {
   signInSchema,
   userIdSchema,
   createCardSchema,
+  cardIdSchema,
 };
