@@ -12,12 +12,13 @@ const { celebrate } = require("celebrate");
 
 router.get("/", userController.getAllUsers);
 // router.get("/:userId", userController.getUserById);
-router.get("/:userId", celebrate(userIdSchema), userController.getUserById);
+
 router.patch(
   "/me",
   celebrate({ body: updateUserSchema }),
   userController.updateProfile
 );
+router.get("/:userId", celebrate(userIdSchema), userController.getUserById);
 router.patch(
   "/me/avatar",
   celebrate({ body: updateAvatarSchema }),
