@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { Segments } = require("celebrate");
 
 const avatarUrlRegex =
   /^(https?:\/\/)(www\.)?([a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+)#?$/;
@@ -12,6 +13,16 @@ const createUserSchema = Joi.object({
     "string.pattern.base": "Некорректный URL аватара",
   }),
 });
+
+const userIdSchema = {
+  [Segments.PARAMS]: Joi.object().keys({
+    userId: Joi.string().alphanum().length(24).required().messages({
+      "string.length": "Некорректный ID пользователя",
+      "string.alphanum": "Некорректный ID пользователя",
+      "any.required": "ID пользователя обязателен",
+    }),
+  }),
+};
 
 const updateUserSchema = Joi.object({
   name: Joi.string().min(2).max(30),
@@ -35,4 +46,5 @@ module.exports = {
   updateUserSchema,
   updateAvatarSchema,
   signInSchema,
+  userIdSchema,
 };
