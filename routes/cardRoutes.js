@@ -11,7 +11,7 @@ router.post(
   celebrate({ body: createCardSchema }),
   cardController.createCard
 );
-router.post("/cards", celebrate(cardIdSchema), cardController.createCard);
+
 router.put("/:cardId/likes", celebrate(cardIdSchema), cardController.likeCard);
 router.delete("/:cardId", celebrate(cardIdSchema), cardController.deleteCard);
 router.delete(
