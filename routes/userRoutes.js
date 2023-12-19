@@ -11,19 +11,17 @@ const auth = require("../middlewares/auth");
 const { celebrate } = require("celebrate");
 
 router.get("/", userController.getAllUsers);
-// router.get("/:userId", userController.getUserById);
-
+router.get("/me", auth, userController.getCurrentUser);
+router.get("/:userId", celebrate(userIdSchema), userController.getUserById);
 router.patch(
   "/me",
   celebrate({ body: updateUserSchema }),
   userController.updateProfile
 );
-router.get("/:userId", celebrate(userIdSchema), userController.getUserById);
 router.patch(
   "/me/avatar",
   celebrate({ body: updateAvatarSchema }),
   userController.updateAvatar
 );
-router.get("/me", auth, userController.getCurrentUser);
 
 module.exports = router;
