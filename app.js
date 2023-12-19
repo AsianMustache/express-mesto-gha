@@ -1,6 +1,7 @@
 const express = require("express");
 
 const mongoose = require("mongoose");
+const { celebrate, Joi, errors: celebrateErrors } = require("celebrate");
 const { login, createUser } = require("./controllers/userController");
 const rootRouter = require("./routes/index");
 const userRouter = require("./routes/userRoutes");
@@ -28,11 +29,13 @@ mongoose
 
 app.use(express.json());
 
-app.post("/signup", validate(createUserSchema), createUser);
-app.post("/signin", validate(signInSchema), login);
+// app.post("/signup", validate(createUserSchema), createUser);
+// app.post("/signin", validate(signInSchema), login);
+app.post("/signup", celebrate({ body: createUserSchema }), createUser);
+app.post("/signin", celebrate({ body: signInSchema }), login);
 
 app.use(auth);
-
+app.use(celebrateErrors());
 app.use("/", rootRouter);
 
 app.use("/users", userRouter);
