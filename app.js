@@ -29,13 +29,10 @@ mongoose
 
 app.use(express.json());
 
-// app.post("/signup", validate(createUserSchema), createUser);
-// app.post("/signin", validate(signInSchema), login);
 app.post("/signup", celebrate({ body: createUserSchema }), createUser);
 app.post("/signin", celebrate({ body: signInSchema }), login);
 
 app.use(auth);
-app.use(celebrateErrors());
 app.use("/", rootRouter);
 
 app.use("/users", userRouter);
@@ -43,6 +40,7 @@ app.get("/", (req, res) => {
   res.status(HTTP_OK).send({ message: "Я сработал" });
 });
 
+app.use(celebrateErrors());
 app.use(errors);
 
 app.use((req, res) => {
