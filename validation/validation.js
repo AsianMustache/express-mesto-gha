@@ -41,10 +41,16 @@ const signInSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+const createCardSchema = Joi.object({
+  name: Joi.string().min(2).max(30).required(),
+  link: Joi.string().uri().required(),
+});
+
 module.exports = {
   createUserSchema,
   updateUserSchema,
   updateAvatarSchema,
   signInSchema,
   userIdSchema,
+  createCardSchema,
 };
