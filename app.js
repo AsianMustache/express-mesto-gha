@@ -31,7 +31,7 @@ app.use("/users", userRouter);
 app.use(celebrateErrors());
 app.use(errors);
 
-app.use((req, res) => {
+app.use((res) => {
   res.status(HTTP_NOT_FOUND).json({ message: "Страница не найдена" });
 });
 
