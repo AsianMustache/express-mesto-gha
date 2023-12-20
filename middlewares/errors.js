@@ -9,10 +9,10 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 // eslint-disable-next-line consistent-return
 module.exports = (err, res) => {
   if (
-    err instanceof BadRequestError ||
-    err instanceof NotFoundError ||
-    err instanceof UnauthorizedError ||
-    err instanceof ForbiddenError
+    err instanceof BadRequestError
+    || err instanceof NotFoundError
+    || err instanceof UnauthorizedError
+    || err instanceof ForbiddenError
   ) {
     return res.status(err.status).send({ message: err.message });
   }
@@ -44,8 +44,7 @@ module.exports = (err, res) => {
   }
 
   // По умолчанию возвращаем 500 ошибку
-  const statusCode =
-    err.statusCode || http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
+  const statusCode = err.statusCode || http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
   res.status(statusCode).send({
     message:
       statusCode === http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR
