@@ -28,22 +28,9 @@ exports.getUserById = async (req, res, next) => {
     } else {
       userId = req.params.userId;
     }
-
-    // if (!mongoose.Types.ObjectId.isValid(userId)) {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-    //     .send({ message: "Некорректный ID пользователя" });
-    // }
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       throw new BadRequestError("Некорректный ID пользователя");
     }
-
-    // const user = await User.findById(userId);
-    // if (!user) {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-    //     .send({ message: "Пользователь не найден" });
-    // }
     const user = await User.findById(userId);
     if (!user) {
       throw new NotFoundError("Пользователь не найден");
@@ -108,21 +95,11 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email }).select("+password");
-    // if (!user) {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
-    //     .send({ message: "Неверные почта или пароль" });
-    // }
     if (!user) {
       throw new UnauthorizedError("Неверные почта или пароль");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
-    //     .send({ message: "Неверные почта или пароль" });
-    // }
     if (!isMatch) {
       throw new UnauthorizedError("Неверные почта или пароль");
     }
@@ -154,12 +131,6 @@ exports.getCurrentUser = async (req, res, next) => {
 
     const userId = req.user._id;
     const user = await User.findById(userId);
-
-    // if (!user) {
-    //   return res
-    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-    //     .send({ message: "Пользователь не найден" });
-    // }
     if (!user) {
       throw new NotFoundError("Пользователь не найден");
     }

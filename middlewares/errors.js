@@ -1,26 +1,23 @@
 const http2 = require("http2");
+const BadRequestError = require("../utils/BadRequestError");
+const NotFoundError = require("../utils/NotFoundError");
+const UnauthorizedError = require("../utils/UnauthorizedError");
+const ForbiddenError = require("../utils/ForbiddenErrors");
 
 const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
-class GeneralError extends Error {
-  constructor(message) {
-    super();
-    this.message = message;
+// eslint-disable-next-line consistent-return
+module.exports = (err, res) => {
+  if (
+    err instanceof BadRequestError ||
+    err instanceof NotFoundError ||
+    err instanceof UnauthorizedError ||
+    err instanceof ForbiddenError
+  ) {
+    return res.status(err.status).send({ message: err.message });
   }
-  getCode() {
-    if (this instanceof BadRequestError) return 400;
-    if (this instanceof NotFoundError) return 404;
-    if (this instanceof UnauthorizedError) return 401;
-    if (this instanceof ForbiddenError) return 403;
-    return 500;
-  }
-}
-class BadRequestError extends GeneralError {}
-class NotFoundError extends GeneralError {}
-class UnauthorizedError extends GeneralError {}
-class ForbiddenError extends GeneralError {}
 
-module.exports = (err, req, res, next) => {
+  res.status(500).send({ message: "На сервере произошла ошибка" });
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
     return res.status(400).json({
@@ -58,7 +55,6 @@ module.exports = (err, req, res, next) => {
 };
 
 module.exports = {
-  GeneralError,
   BadRequestError,
   NotFoundError,
   UnauthorizedError,

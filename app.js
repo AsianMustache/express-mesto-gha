@@ -8,7 +8,6 @@ const errors = require("./middlewares/errors");
 
 const app = express();
 const PORT = 3000;
-const HTTP_OK = 200;
 const HTTP_NOT_FOUND = 404;
 
 mongoose

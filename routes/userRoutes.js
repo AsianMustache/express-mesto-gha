@@ -1,6 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
+const { celebrate } = require("celebrate");
 const userController = require("../controllers/userController");
 const {
   updateUserSchema,
@@ -8,7 +9,6 @@ const {
   userIdSchema,
 } = require("../validation/validation");
 const auth = require("../middlewares/auth");
-const { celebrate } = require("celebrate");
 
 router.get("/", userController.getAllUsers);
 router.get("/me", auth, userController.getCurrentUser);
