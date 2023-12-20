@@ -3,6 +3,11 @@ const http2 = require("http2");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} = require("../middlewares/errors");
 
 // Получение всех пользователей
 exports.getAllUsers = async (req, res, next) => {
@@ -24,17 +29,24 @@ exports.getUserById = async (req, res, next) => {
       userId = req.params.userId;
     }
 
+    // if (!mongoose.Types.ObjectId.isValid(userId)) {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
+    //     .send({ message: "Некорректный ID пользователя" });
+    // }
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res
-        .status(http2.constants.HTTP_STATUS_BAD_REQUEST)
-        .send({ message: "Некорректный ID пользователя" });
+      throw new BadRequestError("Некорректный ID пользователя");
     }
 
+    // const user = await User.findById(userId);
+    // if (!user) {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+    //     .send({ message: "Пользователь не найден" });
+    // }
     const user = await User.findById(userId);
     if (!user) {
-      return res
-        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-        .send({ message: "Пользователь не найден" });
+      throw new NotFoundError("Пользователь не найден");
     }
 
     res.status(http2.constants.HTTP_STATUS_OK).json(user);
@@ -96,17 +108,23 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email }).select("+password");
+    // if (!user) {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
+    //     .send({ message: "Неверные почта или пароль" });
+    // }
     if (!user) {
-      return res
-        .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
-        .send({ message: "Неверные почта или пароль" });
+      throw new UnauthorizedError("Неверные почта или пароль");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
+    //     .send({ message: "Неверные почта или пароль" });
+    // }
     if (!isMatch) {
-      return res
-        .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
-        .send({ message: "Неверные почта или пароль" });
+      throw new UnauthorizedError("Неверные почта или пароль");
     }
 
     const token = jwt.sign({ _id: user._id }, "dev_secret", {
@@ -137,10 +155,13 @@ exports.getCurrentUser = async (req, res, next) => {
     const userId = req.user._id;
     const user = await User.findById(userId);
 
+    // if (!user) {
+    //   return res
+    //     .status(http2.constants.HTTP_STATUS_NOT_FOUND)
+    //     .send({ message: "Пользователь не найден" });
+    // }
     if (!user) {
-      return res
-        .status(http2.constants.HTTP_STATUS_NOT_FOUND)
-        .send({ message: "Пользователь не найден" });
+      throw new NotFoundError("Пользователь не найден");
     }
 
     res.status(http2.constants.HTTP_STATUS_OK).json({
