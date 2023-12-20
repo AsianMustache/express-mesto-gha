@@ -10,16 +10,13 @@ const auth = (req, res, next) => {
     return next(new UnauthorizedError("Требуется авторизация")); // Использование класса ошибки
   }
 
-  let payload;
-
   try {
-    payload = jwt.verify(token, "dev_secret");
+    const payload = jwt.verify(token, "dev_secret");
+    req.user = payload;
+    next();
   } catch (err) {
     next(new UnauthorizedError("Неверный токен"));
   }
-
-  req.user = payload;
-  next();
 };
 
 module.exports = auth;
