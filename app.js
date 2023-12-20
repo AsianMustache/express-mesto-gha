@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { errors: celebrateErrors } = require("celebrate");
 const rootRouter = require("./routes/index");
-const userRouter = require("./routes/userRoutes");
 const errors = require("./middlewares/errors");
 
 const app = express();
@@ -26,8 +25,6 @@ app.use(express.json());
 
 app.use("/", rootRouter);
 
-app.use("/users", userRouter);
-
 app.use(celebrateErrors());
 app.use(errors);
 
@@ -38,4 +35,3 @@ app.use((res) => {
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
 });
-// for test
