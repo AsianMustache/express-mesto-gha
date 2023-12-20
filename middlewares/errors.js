@@ -54,7 +54,7 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 //   });
 // };
 // eslint-disable-next-line consistent-return
-module.exports = (err, req, res, next) => {
+module.exports = (err, req, res) => {
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
     return res.status(400).json({
