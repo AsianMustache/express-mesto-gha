@@ -52,6 +52,7 @@ module.exports = (err, req, res, next) => {
         ? "На сервере произошла ошибка"
         : err.message,
   });
+  next(err);
 };
 
 module.exports = {
