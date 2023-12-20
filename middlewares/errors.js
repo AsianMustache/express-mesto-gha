@@ -54,7 +54,7 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 //   });
 // };
 // eslint-disable-next-line consistent-return
-module.exports = (err, req, res) => {
+const errorHandler = (err, req, res) => {
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
     return res.status(400).json({
@@ -100,9 +100,9 @@ module.exports = (err, req, res) => {
   });
 };
 
-module.exports = {
-  BadRequestError,
-  NotFoundError,
-  UnauthorizedError,
-  ForbiddenError,
-};
+module.exports = errorHandler;
+
+module.exports.BadRequestError = BadRequestError;
+module.exports.NotFoundError = NotFoundError;
+module.exports.UnauthorizedError = UnauthorizedError;
+module.exports.ForbiddenError = ForbiddenError;
