@@ -54,7 +54,7 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 //   });
 // };
 // eslint-disable-next-line consistent-return
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
     return res.status(400).json({
@@ -98,6 +98,7 @@ const errorHandler = (err, req, res) => {
         ? "На сервере произошла ошибка"
         : err.message,
   });
+  next();
 };
 
 module.exports = {
