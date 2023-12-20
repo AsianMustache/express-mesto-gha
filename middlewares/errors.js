@@ -70,14 +70,14 @@ const errorHandler = (err, req, res) => {
   if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
     return res
       .status(http2.constants.HTTP_STATUS_CONFLICT)
-      .send({ message: "Этот email уже используется" });
+      .json({ message: "Этот email уже используется" });
   }
 
   // Обработка неверного токена
   if (err.name === "JsonWebTokenError") {
     return res
       .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
-      .send({ message: "Некорректный токен" });
+      .jsno({ message: "Некорректный токен" });
   }
 
   // Обработка кастомных ошибок
@@ -87,12 +87,12 @@ const errorHandler = (err, req, res) => {
     || err instanceof UnauthorizedError
     || err instanceof ForbiddenError
   ) {
-    return res.status(err.status).send({ message: err.message });
+    return res.status(err.statusCode).json({ message: err.message });
   }
 
   // По умолчанию возвращаем 500 ошибку
   const statusCode = err.statusCode || http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
-  res.status(statusCode).send({
+  res.status(statusCode).json({
     message:
       statusCode === http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR
         ? "На сервере произошла ошибка"
@@ -100,9 +100,10 @@ const errorHandler = (err, req, res) => {
   });
 };
 
-module.exports = errorHandler;
-
-module.exports.BadRequestError = BadRequestError;
-module.exports.NotFoundError = NotFoundError;
-module.exports.UnauthorizedError = UnauthorizedError;
-module.exports.ForbiddenError = ForbiddenError;
+module.exports = {
+  errorHandler,
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+  ForbiddenError,
+};
