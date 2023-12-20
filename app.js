@@ -29,7 +29,6 @@ app.use("/", rootRouter);
 app.use("/users", userRouter);
 
 app.use(celebrateErrors());
-console.log(typeof errors);
 app.use(errors);
 
 app.use((res) => {
