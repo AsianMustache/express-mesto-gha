@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const http2 = require("http2");
 const UnauthorizedError = require("../utils/UnauthorizedError");
 
 // eslint-disable-next-line consistent-return
@@ -7,7 +8,7 @@ const auth = (req, res, next) => {
     ? req.headers.authorization.replace("Bearer ", "")
     : null;
   if (!token) {
-    return next(new UnauthorizedError("Требуется авторизация")); // Использование класса ошибки
+    return next(new UnauthorizedError("Требуется авторизация"));
   }
 
   try {
@@ -15,7 +16,9 @@ const auth = (req, res, next) => {
     req.user = payload;
     next();
   } catch (err) {
-    next(new UnauthorizedError("Неверный токен"));
+    res
+      .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
+      .json({ message: "Неверный токен" });
   }
 };
 
