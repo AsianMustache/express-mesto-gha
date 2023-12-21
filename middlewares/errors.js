@@ -144,11 +144,4 @@ const errorHandler = (err, req, res) => {
     .json({ message: err.message || "На сервере произошла ошибка" });
 };
 
-// module.exports = {
-//   errorHandler,
-//   BadRequestError,
-//   NotFoundError,
-//   UnauthorizedError,
-//   ForbiddenError,
-// };
 module.exports = errorHandler;
