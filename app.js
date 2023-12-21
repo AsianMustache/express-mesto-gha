@@ -18,7 +18,7 @@ mongoose
     console.log("Подключение установлено");
   })
   .catch((err) => {
-    console.error("Ошибка подключения:", err.message);
+    console.log("Ошибка подключения:", err.message);
   });
 
 app.use(express.json());

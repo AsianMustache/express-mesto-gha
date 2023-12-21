@@ -103,8 +103,10 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
 // eslint-disable-next-line consistent-return
 const errorHandler = (err, req, res) => {
+  console.log("Ошибка: ", err);
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
+    console.log("Ошибка валидации Joi: ", err);
     return res.status(400).json({
       message: "Ошибка валидации данных",
       errors: err.details.map((detail) => ({
@@ -116,6 +118,7 @@ const errorHandler = (err, req, res) => {
 
   // Обработка ошибки дублирования email
   if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
+    console.log("Ошибка дублирования email: ", err);
     return res
       .status(http2.constants.HTTP_STATUS_CONFLICT)
       .json({ message: "Этот email уже используется" });
@@ -123,6 +126,7 @@ const errorHandler = (err, req, res) => {
 
   // Обработка неверного токена
   if (err.name === "JsonWebTokenError") {
+    console.log("Ошибка неверного токена: ", err);
     return res
       .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
       .json({ message: "Некорректный токен" });
@@ -135,10 +139,12 @@ const errorHandler = (err, req, res) => {
     || err instanceof UnauthorizedError
     || err instanceof ForbiddenError
   ) {
+    console.log("Кастомная ошибка: ", err);
     return res.status(err.statusCode || 500).json({ message: err.message });
   }
 
   // По умолчанию возвращаем 500 ошибку
+  console.log("Необработанная ошибка сервера: ", err);
   res
     .status(500)
     .json({ message: err.message || "На сервере произошла ошибка" });
