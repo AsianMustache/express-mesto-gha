@@ -103,7 +103,7 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
 // eslint-disable-next-line consistent-return
 const errorHandler = (err, req, res) => {
-  console.log("Ошибка: ", err);
+  // console.log("Ошибка: ", err);
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
     console.log("Ошибка валидации Joi: ", err);
@@ -140,7 +140,7 @@ const errorHandler = (err, req, res) => {
     || err instanceof ForbiddenError
   ) {
     console.log("Кастомная ошибка: ", err);
-    return res.status(err.statusCode || 500).json({ message: err.message });
+    return res.status(err.status || 500).json({ message: err.message });
   }
 
   // По умолчанию возвращаем 500 ошибку
