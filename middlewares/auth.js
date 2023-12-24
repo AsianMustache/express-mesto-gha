@@ -1,3 +1,7 @@
+require("dotenv").config();
+
+const jwt = require("jsonwebtoken");
+const UnauthorizedError = require("../utils/UnauthorizedError");
 // const jwt = require("jsonwebtoken");
 // // const http2 = require("http2");
 // const UnauthorizedError = require("../utils/UnauthorizedError");
@@ -32,12 +36,10 @@
 
 // module.exports = auth;
 
-require("dotenv").config();
-import { verify } from "jsonwebtoken";
-import UnauthorizedError from "../utils/UnauthorizedError";
+// eslint-disable-next-line import/no-extraneous-dependencies
 
 // eslint-disable-next-line consistent-return
-export default (req, res, next) => {
+module.exports = (req, res, next) => {
   const { NODE_ENV, JWT_SECRET } = process.env;
   const { authorization } = req.headers;
 
@@ -48,7 +50,7 @@ export default (req, res, next) => {
   const token = authorization.replace("Bearer ", "");
 
   try {
-    const payload = verify(
+    const payload = jwt.verify(
       token,
       NODE_ENV === "production" ? JWT_SECRET : "dev-secret"
     );
