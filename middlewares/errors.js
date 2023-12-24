@@ -160,7 +160,7 @@ const ForbiddenError = require("../utils/ForbiddenErrors");
 // module.exports = errorHandler;
 
 // eslint-disable-next-line consistent-return
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   if (err instanceof mongoose.Error) {
     return res.status(StatusCodes.BAD_REQUEST).send({ message: err.message });
   }
