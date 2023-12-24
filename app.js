@@ -25,8 +25,8 @@ app.use(express.json());
 
 app.use("/", rootRouter);
 
-app.use(errorHandler);
 app.use(celebrateErrors());
+app.use(errorHandler);
 
 app.use((res) => {
   res.status(HTTP_NOT_FOUND).json({ message: "Страница не найдена" });
