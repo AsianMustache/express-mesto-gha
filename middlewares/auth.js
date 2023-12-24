@@ -8,9 +8,15 @@ const auth = (req, res, next) => {
     ? req.headers.authorization.replace("Bearer ", "")
     : null;
   console.log("Полученный токен: ", token);
+  // if (!token) {
+  //   console.log("Ошибка: Требуется авторизация");
+  //   return next(new UnauthorizedError("Требуется авторизация"));
+  // }
   if (!token) {
     console.log("Ошибка: Требуется авторизация");
-    // return next(new UnauthorizedError("Требуется авторизация"));
+    return Promise.reject(new UnauthorizedError("Требуется авторизация")).catch(
+      next
+    );
   }
 
   try {
@@ -20,7 +26,7 @@ const auth = (req, res, next) => {
     next();
   } catch (err) {
     console.log("Ошибка при проверке токена: ", err);
-    next(new UnauthorizedError("Неверный токен"));
+    // next(new UnauthorizedError("Неверный токен"));
   }
 };
 
