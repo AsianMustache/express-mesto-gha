@@ -134,10 +134,10 @@ const errorHandler = (err, req, res) => {
 
   // Обработка кастомных ошибок
   if (
-    err instanceof BadRequestError ||
-    err instanceof NotFoundError ||
-    err instanceof UnauthorizedError ||
-    err instanceof ForbiddenError
+    err instanceof BadRequestError
+    || err instanceof NotFoundError
+    || err instanceof UnauthorizedError
+    || err instanceof ForbiddenError
   ) {
     console.log("Кастомная ошибка: ", err);
     return res.status(err.status || 500).json({ message: err.message });
