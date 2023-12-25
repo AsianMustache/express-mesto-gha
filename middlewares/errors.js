@@ -1,8 +1,8 @@
-const http2 = require("http2");
-const BadRequestError = require("../utils/BadRequestError");
-const NotFoundError = require("../utils/NotFoundError");
-const UnauthorizedError = require("../utils/UnauthorizedError");
-const ForbiddenError = require("../utils/ForbiddenErrors");
+import { constants } from "http2";
+import BadRequestError from "../utils/BadRequestError";
+import NotFoundError from "../utils/NotFoundError";
+import UnauthorizedError from "../utils/UnauthorizedError";
+import ForbiddenError from "../utils/ForbiddenErrors";
 
 const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
@@ -120,7 +120,7 @@ const errorHandler = (err, req, res, next) => {
   if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
     console.log("Ошибка дублирования email: ", err);
     return res
-      .status(http2.constants.HTTP_STATUS_CONFLICT)
+      .status(constants.HTTP_STATUS_CONFLICT)
       .json({ message: "Этот email уже используется" });
   }
 
@@ -128,7 +128,7 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === "JsonWebTokenError") {
     console.log("Ошибка неверного токена: ", err);
     return res
-      .status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
+      .status(constants.HTTP_STATUS_UNAUTHORIZED)
       .json({ message: "Некорректный токен" });
   }
 
@@ -150,4 +150,4 @@ const errorHandler = (err, req, res, next) => {
     .json({ message: err.message || "На сервере произошла ошибка" });
 };
 
-module.exports = errorHandler;
+export default errorHandler;
