@@ -2,11 +2,9 @@ const mongoose = require("mongoose");
 
 const http2 = require("http2");
 const Card = require("../models/card");
-const {
-  BadRequestError,
-  NotFoundError,
-  ForbiddenError,
-} = require("../middlewares/errors");
+const BadRequestError = require("../utils/BadRequestError");
+const NotFoundError = require("../utils/NotFoundError");
+const ForbiddenError = require("../utils/ForbiddenErrors");
 
 exports.getCards = async (req, res, next) => {
   try {

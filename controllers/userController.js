@@ -3,11 +3,9 @@ const http2 = require("http2");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const {
-  BadRequestError,
-  NotFoundError,
-  UnauthorizedError,
-} = require("../middlewares/errors");
+const BadRequestError = require("../utils/BadRequestError");
+const NotFoundError = require("../utils/NotFoundError");
+const UnauthorizedError = require("../utils/UnauthorizedError");
 
 // Получение всех пользователей
 exports.getAllUsers = async (req, res, next) => {

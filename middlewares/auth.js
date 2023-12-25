@@ -15,6 +15,7 @@ const auth = (req, res, next) => {
     req.user = payload;
     next();
   } catch (err) {
+    console.error("Auth Middleware: Ошибка при проверке токена", err);
     next(new UnauthorizedError("Неверный токен"));
   }
 };

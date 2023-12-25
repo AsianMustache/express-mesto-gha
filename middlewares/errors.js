@@ -8,6 +8,7 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
 // eslint-disable-next-line consistent-return, no-unused-vars
 const errorHandler = (err, req, res, next) => {
+  console.error("ErrorHandler: Получена ошибка", err);
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
     return res.status(400).json({
@@ -41,6 +42,7 @@ const errorHandler = (err, req, res, next) => {
     return res.status(err.status || 500).json({ message: err.message });
   }
   if (err instanceof UnauthorizedError) {
+    console.log("ОШибка Unauthorized", err);
     return res.status(err.status || 500).json({ message: err.message });
   }
   if (err instanceof ForbiddenError) {
