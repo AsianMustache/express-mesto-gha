@@ -1,5 +1,5 @@
 const http2 = require("http2");
-const BadRequestError = require("../utils/BadRequestError").default;
+const BadRequestError = require("../utils/BadRequestError");
 const NotFoundError = require("../utils/NotFoundError");
 const UnauthorizedError = require("../utils/UnauthorizedError");
 const ForbiddenError = require("../utils/ForbiddenErrors");
