@@ -35,16 +35,16 @@ const errorHandler = (err, req, res, next) => {
 
   // Обработка кастомных ошибок
   if (err instanceof BadRequestError) {
-    return res.status(err.status || 500).json({ message: err.message });
+    return res.status(err.status).json({ message: err.message });
   }
   if (err instanceof NotFoundError) {
-    return res.status(err.status || 500).json({ message: err.message });
+    return res.status(err.status).json({ message: err.message });
   }
   if (err instanceof UnauthorizedError) {
-    return res.status(err.status || 500).json({ message: err.message });
+    return res.status(err.status).json({ message: err.message });
   }
   if (err instanceof ForbiddenError) {
-    return res.status(err.status || 500).json({ message: err.message });
+    return res.status(err.status).json({ message: err.message });
   }
 
   // По умолчанию возвращаем 500 ошибку
