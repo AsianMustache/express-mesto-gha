@@ -101,8 +101,8 @@ const MONGO_DUPLICATE_ERROR_CODE = 11000;
 //   next();
 // };
 
-// eslint-disable-next-line consistent-return
-const errorHandler = (err, req, res) => {
+// eslint-disable-next-line consistent-return, no-unused-vars
+const errorHandler = (err, req, res, next) => {
   // console.log("Ошибка: ", err);
   // Обработка ошибок валидации Joi
   if (err && err.isJoi) {
