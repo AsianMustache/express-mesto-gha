@@ -28,7 +28,7 @@ app.use("/", rootRouter);
 app.use(celebrateErrors());
 app.use(errorHandler);
 
-app.use("*", (err, req, res, next) => {
+app.use((req, res, next) => {
   next(new NotFoundError("Страница не найдена"));
 });
 
