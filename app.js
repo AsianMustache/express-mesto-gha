@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const { errors: celebrateErrors } = require("celebrate");
 const rootRouter = require("./routes/index");
 const errorHandler = require("./middlewares/errors");
-// const NotFoundError = require("./utils/NotFoundError");
+const NotFoundError = require("./utils/NotFoundError");
 
 const app = express();
 const PORT = 3000;
@@ -25,10 +25,12 @@ app.use(express.json());
 
 app.use("/", rootRouter);
 
+// app.use("*", (req, res, next) => {
+//   console.log(`Запрос к несуществующему маршруту: ${req.path}`);
+//   next(new NotFoundError("Страница не найдена"));
+// });
 app.use(celebrateErrors());
 app.use(errorHandler);
-
-app.use("*", errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
