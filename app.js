@@ -25,12 +25,12 @@ app.use(express.json());
 
 app.use("/", rootRouter);
 
-// app.use("*", (req, res, next) => {
-//   console.log(`Запрос к несуществующему маршруту: ${req.path}`);
-//   next(new NotFoundError("Страница не найдена"));
-// });
 app.use(celebrateErrors());
 app.use(errorHandler);
+
+app.use("*", (err, req, res, next) => {
+  next(new NotFoundError("Страница не найдена"));
+});
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
