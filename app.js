@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const { errors: celebrateErrors } = require("celebrate");
 const rootRouter = require("./routes/index");
 const errorHandler = require("./middlewares/errors");
+const NotFoundError = require("./utils/NotFoundError");
 
 const app = express();
 const PORT = 3000;
-const HTTP_NOT_FOUND = 404;
 
 mongoose
   .connect("mongodb://localhost:27017/mestodb", {
@@ -28,8 +28,8 @@ app.use("/", rootRouter);
 app.use(celebrateErrors());
 app.use(errorHandler);
 
-app.use("*", (req, res) => {
-  res.status(HTTP_NOT_FOUND).json({ message: "Страница не найдена" });
+app.use("*", (req, res, next) => {
+  next(new NotFoundError("Страница не найдена"));
 });
 
 app.listen(PORT, () => {

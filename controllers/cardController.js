@@ -15,6 +15,7 @@ exports.getCards = async (req, res, next) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
 exports.createCard = async (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
@@ -23,7 +24,7 @@ exports.createCard = async (req, res, next) => {
     res.status(http2.constants.HTTP_STATUS_CREATED).json(card);
   } catch (err) {
     if (err.name === "ValidationError") {
-      next(new BadRequestError(err.message));
+      return next(new BadRequestError(err.message));
     }
     next(err);
   }
